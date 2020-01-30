@@ -30,4 +30,12 @@ private:
 
 	sf::CircleShape controlledCircle;
 	float secondCircleSpeed;
+
+	sf::CircleShape bouncingCircle;
+	float thirdCircleSpeed;
+	float horizontalDirection = 1.0f;
+	float verticalDirection = -1.0f;
+
+	sf::Text message;
+	sf::Font font;
 };
