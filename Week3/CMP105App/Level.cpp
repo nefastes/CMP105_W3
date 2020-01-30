@@ -11,7 +11,13 @@ Level::Level(sf::RenderWindow* hwnd, Input* in)
 	circle.setFillColor(sf::Color::Yellow);
 	circle.setOrigin(10,10);
 
+	controlledCircle.setRadius(40);
+	controlledCircle.setPosition(window->getSize().x / 4, window->getSize().y / 4);
+	controlledCircle.setFillColor(sf::Color::Blue);
+	controlledCircle.setOrigin(40, 40);
+
 	circleSpeed = 200.0f;
+	secondCircleSpeed = 300.0f;
 }
 
 Level::~Level()
@@ -31,6 +37,11 @@ void Level::update(float dt)
 	if (circle.getPosition().x >= window->getSize().x - 10	|| circle.getPosition().x <= 0 + 10) circleSpeed *= -1;
 	circle.setPosition(circle.getPosition().x, window->getSize().y / 2);
 	circle.move(circleSpeed * dt, 0);
+
+	if (input->isKeyDown(sf::Keyboard::Up) && controlledCircle.getPosition().y > 0 + 40) controlledCircle.move(0, -secondCircleSpeed * dt);
+	else if (input->isKeyDown(sf::Keyboard::Down) && controlledCircle.getPosition().y < window->getSize().y - 40) controlledCircle.move(0, secondCircleSpeed * dt);
+	else if (input->isKeyDown(sf::Keyboard::Right) && controlledCircle.getPosition().x < window->getSize().x - 40) controlledCircle.move(secondCircleSpeed * dt, 0);
+	else if (input->isKeyDown(sf::Keyboard::Left) && controlledCircle.getPosition().x > 0 + 40) controlledCircle.move(-secondCircleSpeed * dt, 0);
 }
 
 // Render level
@@ -38,6 +49,7 @@ void Level::render()
 {
 	beginDraw();
 	window->draw(circle);
+	window->draw(controlledCircle);
 	endDraw();
 }
 

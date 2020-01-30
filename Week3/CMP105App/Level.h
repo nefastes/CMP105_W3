@@ -27,4 +27,7 @@ private:
 	//Game objects
 	sf::CircleShape circle;
 	float circleSpeed;
+
+	sf::CircleShape controlledCircle;
+	float secondCircleSpeed;
 };
