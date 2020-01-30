@@ -6,7 +6,12 @@ Level::Level(sf::RenderWindow* hwnd, Input* in)
 	input = in;
 
 	// initialise game objects
+	circle.setRadius(10);
+	circle.setPosition(window->getSize().x / 2, window->getSize().y / 2);
+	circle.setFillColor(sf::Color::Yellow);
+	circle.setOrigin(10,10);
 
+	circleSpeed = 200.0f;
 }
 
 Level::~Level()
@@ -23,14 +28,16 @@ void Level::handleInput(float dt)
 // Update game objects
 void Level::update(float dt)
 {
-	
+	if (circle.getPosition().x >= window->getSize().x - 10	|| circle.getPosition().x <= 0 + 10) circleSpeed *= -1;
+	circle.setPosition(circle.getPosition().x, window->getSize().y / 2);
+	circle.move(circleSpeed * dt, 0);
 }
 
 // Render level
 void Level::render()
 {
 	beginDraw();
-
+	window->draw(circle);
 	endDraw();
 }
 
