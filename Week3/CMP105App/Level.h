@@ -19,6 +19,9 @@ private:
 	// Default functions for rendering to the screen.
 	void beginDraw();
 	void endDraw();
+	void playerMovement(float dt);
+	void moveFirstCircle(float dt);
+	void moveThirdCircle(float dt);
 
 	// Default variables for level class.
 	sf::RenderWindow* window;

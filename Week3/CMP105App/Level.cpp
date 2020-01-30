@@ -40,11 +40,28 @@ Level::~Level()
 // handle user input
 void Level::handleInput(float dt)
 {
+	if (input->isKeyDown(sf::Keyboard::Add)) thirdCircleSpeed += 1.0f;
+	else if (input->isKeyDown(sf::Keyboard::Subtract)) thirdCircleSpeed -= 1.0f;
+	playerMovement(dt);
+}
 
+void Level::playerMovement(float dt)
+{
+	if (input->isKeyDown(sf::Keyboard::Up) && controlledCircle.getPosition().y > 0 + 40) controlledCircle.move(0, -secondCircleSpeed * dt);
+	if (input->isKeyDown(sf::Keyboard::Down) && controlledCircle.getPosition().y < window->getSize().y - 40) controlledCircle.move(0, secondCircleSpeed * dt);
+	if (input->isKeyDown(sf::Keyboard::Right) && controlledCircle.getPosition().x < window->getSize().x - 40) controlledCircle.move(secondCircleSpeed * dt, 0);
+	if (input->isKeyDown(sf::Keyboard::Left) && controlledCircle.getPosition().x > 0 + 40) controlledCircle.move(-secondCircleSpeed * dt, 0);
 }
 
 // Update game objects
 void Level::update(float dt)
+{
+	moveFirstCircle(dt);
+	moveThirdCircle(dt);
+	message.setString("The bouncing ball current speed is " + std::to_string((int)thirdCircleSpeed) + " pixels/second.");
+}
+
+void Level::moveFirstCircle(float dt)
 {
 	if (circle.getPosition().x >= window->getSize().x - 10)
 	{
@@ -58,20 +75,16 @@ void Level::update(float dt)
 	}
 	circle.setPosition(circle.getPosition().x, window->getSize().y / 2);
 	circle.move(circleSpeed * dt, 0);
+}
 
-	if (input->isKeyDown(sf::Keyboard::Up) && controlledCircle.getPosition().y > 0 + 40) controlledCircle.move(0, -secondCircleSpeed * dt);
-	else if (input->isKeyDown(sf::Keyboard::Down) && controlledCircle.getPosition().y < window->getSize().y - 40) controlledCircle.move(0, secondCircleSpeed * dt);
-	else if (input->isKeyDown(sf::Keyboard::Right) && controlledCircle.getPosition().x < window->getSize().x - 40) controlledCircle.move(secondCircleSpeed * dt, 0);
-	else if (input->isKeyDown(sf::Keyboard::Left) && controlledCircle.getPosition().x > 0 + 40) controlledCircle.move(-secondCircleSpeed * dt, 0);
-
-	if (input->isKeyDown(sf::Keyboard::Add)) thirdCircleSpeed += 1.0f;
-	else if (input->isKeyDown(sf::Keyboard::Subtract)) thirdCircleSpeed -= 1.0f;
+void Level::moveThirdCircle(float dt)
+{
 	if (bouncingCircle.getPosition().x >= window->getSize().x - 20)
 	{
 		horizontalDirection *= -1;
 		bouncingCircle.setPosition(window->getSize().x - 20, bouncingCircle.getPosition().y);
 	}
-	if(bouncingCircle.getPosition().x <= 0 + 20)
+	if (bouncingCircle.getPosition().x <= 0 + 20)
 	{
 		horizontalDirection *= -1;
 		bouncingCircle.setPosition(0 + 20, bouncingCircle.getPosition().y);
@@ -87,7 +100,6 @@ void Level::update(float dt)
 		bouncingCircle.setPosition(bouncingCircle.getPosition().x, 0 + 20);
 	}
 	bouncingCircle.move(horizontalDirection * thirdCircleSpeed * dt, verticalDirection * thirdCircleSpeed * dt);
-	message.setString("The bouncing ball current speed is " + std::to_string((int)thirdCircleSpeed) + " pixels/second.");
 }
 
 // Render level
